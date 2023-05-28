@@ -1,5 +1,3 @@
-// PCTOols.cpp : Defines the entry point for the application.
-//
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -7,15 +5,14 @@
 #include "PCTOols.h"
 
 
-
 #define MAX_LOADSTRING 100
 #define windowH 720
 #define windowW 1280
 #define SleepTimer 5
 
-HINSTANCE hInst;                                // current instance
-WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
-WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+HINSTANCE hInst;
+WCHAR szTitle[MAX_LOADSTRING];
+WCHAR szWindowClass[MAX_LOADSTRING];
 HWND hwndButton;
 HWND hEditA;
 bool Flag = false;
@@ -54,13 +51,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,_In_opt_ HINSTANCE hPrevInstance,
     return (int) msg.wParam;
 }
 
-
-
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -82,38 +72,16 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassExW(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HINSTANCE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+   hInst = hInstance;
 
    SetPriorityClass(GetCurrentProcess(),HIGH_PRIORITY_CLASS);
 
    curl_global_init(CURL_GLOBAL_ALL);
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX,
-      CW_USEDEFAULT, 0, windowW, windowH, nullptr, nullptr, hInstance, nullptr);
-   hwndButton = CreateWindowW(
-       L"BUTTON",  // Predefined class; Unicode assumed 
-       L"BLAST SOME NIGGAZ",      // Button text 
-       WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-       windowW/2-150,         // x position 
-       windowH/2-50,         // y position 
-       300,        // Button width
-       100,        // Button height
-       hWnd,     // Parent window
-       NULL,       // No menu.
-       (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-       NULL);      // Pointer not needed.
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, CW_USEDEFAULT, 0, windowW, windowH, nullptr, nullptr, hInstance, nullptr);
+   hwndButton = CreateWindowW(L"BUTTON",L"BLAST SOME NIGGAZ",  WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,windowW/2-150, windowH/2-50, 300, 100,  hWnd, NULL,(HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),NULL);
    hEditA = CreateWindowA("Edit", "cookies", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | WS_BORDER | ES_LEFT, windowW / 2 - 200, windowH / 2 - 80, 400, 25, hWnd, NULL, NULL, NULL);
 
    if (!hWnd)
@@ -174,16 +142,6 @@ void Meow() {
     slist1 = NULL;
 }
 
-//
-//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Processes messages for the main window.
-//
-//  WM_COMMAND  - process the application menu
-//  WM_PAINT    - Paint the main window
-//  WM_DESTROY  - post a quit message and return
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -194,8 +152,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SendMessage(hwndButton, WM_SETTEXT, 0, (LPARAM)(Flag?L"chill nigga CHILL!!!":L"BLAST SOME NIGGAZ"));
             SendMessage(hEditA, WM_GETTEXT, (WPARAM)150, (LPARAM)nyannyanW);
             wcstombs(nyannyan,nyannyanW,sizeof(char)*149);
-            //MessageBoxA(NULL,nyannyan,"",MB_OK);
-            //strcpy(nyannyan,"Cookie: LAST_REQUESTED_TARGET=cvv; PHPSESSID=3id6rpdplf8a9dspmiafj5sl34jo2vgv; webrole=gen; webidentity=S8223588Y");
             if (Flag) {
                 std::thread t(Meow);
                 t.detach();
@@ -213,20 +169,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HBITMAP hImage = LoadBitmap((HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE), MAKEINTRESOURCE(IDB_BITMAP1));
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            HDC hdcMem = CreateCompatibleDC(hdc); // hDC is a DC structure supplied by Win32API
+            HDC hdcMem = CreateCompatibleDC(hdc);
             SelectObject(hdcMem, hImage);
-            StretchBlt(
-                hdc,         // destination DC
-                0,        // x upper left
-                0,         // y upper left
-                windowW,       // destination width
-                windowH,      // destination height
-                hdcMem,      // you just created this above
-                0,
-                0,          // x and y upper left
-                768,          // source bitmap width
-                585,          // source bitmap height
-                SRCCOPY);   // raster operation
+            StretchBlt(hdc,0,0,windowW,windowH,hdcMem,0,0,768,585,SRCCOPY);
             EndPaint(hWnd, &ps);
         }
         break;
@@ -241,7 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-
+//UNUSED CURL ALTERNATIVE (EXTREMELY GAY AND CONVOLUTED)
 
 
 /*
